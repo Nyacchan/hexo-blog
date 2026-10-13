@@ -1,0 +1,6 @@
+# hexo robots.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://nyacchan.qzz.io/sitemap.xml
+Sitemap: https://nyacchan.qzz.io/baidusitemap.xml

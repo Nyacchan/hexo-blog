@@ -1,0 +1,30 @@
+# 友人帐数据源：source/social/link/index.md 里的 {% flink %} 标签会读取本文件
+# 想加友链：在下面某个分组的 link_list 里追加一项即可
+- class_name: 推荐站点🍔
+  class_desc: 这里放最熟悉的小伙伴或者赞助商，当然是最前排啦
+  link_list:
+    - name: Hexo
+      link: https://hexo.io/zh-cn/
+      avatar: https://picsum.photos/id/1039/200/200
+      descr: 快速、简洁且高效的博客框架
+      siteshot: https://picsum.photos/id/1036/800/450
+    - name: Butterfly
+      link: https://butterfly.js.org/
+      avatar: https://picsum.photos/id/1036/200/200
+      descr: Fomalhaut 主题的上游项目
+      siteshot: https://picsum.photos/id/1039/800/450
+
+- class_name: 小伙伴们🍭
+  class_desc: 交换友链请在友人帐页面留言
+  link_list:
+    # 想加友链就照下面的格式追加一项：
+    # - name: 站点名
+    #   link: https://站点地址/
+    #   avatar: 头像图地址
+    #   descr: 一句话介绍
+    #   siteshot: 站点截图地址
+    - name: Hexo
+      link: https://hexo.io/zh-cn/
+      avatar: https://picsum.photos/id/1039/200/200
+      descr: 本站使用的博客框架
+      siteshot: https://picsum.photos/id/1036/800/450
