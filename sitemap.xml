@@ -11,6 +11,15 @@
   </url>
   
   <url>
+    <loc>https://nyacchan.qzz.io/posts/75afb297.html</loc>
+    
+    <lastmod>2026-10-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://nyacchan.qzz.io/manifest.json</loc>
     
     <lastmod>2026-10-13</lastmod>
@@ -47,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://nyacchan.qzz.io/site/census/index.html</loc>
+    <loc>https://nyacchan.qzz.io/social/fcircle/index.html</loc>
     
     <lastmod>2026-10-13</lastmod>
     
@@ -56,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://nyacchan.qzz.io/social/fcircle/index.html</loc>
+    <loc>https://nyacchan.qzz.io/site/census/index.html</loc>
     
     <lastmod>2026-10-13</lastmod>
     
@@ -92,7 +101,7 @@
   </url>
   
   <url>
-    <loc>https://nyacchan.qzz.io/box/astronomy/index.html</loc>
+    <loc>https://nyacchan.qzz.io/box/gallery/index.html</loc>
     
     <lastmod>2026-10-13</lastmod>
     
@@ -101,7 +110,7 @@
   </url>
   
   <url>
-    <loc>https://nyacchan.qzz.io/box/gallery/index.html</loc>
+    <loc>https://nyacchan.qzz.io/box/astronomy/index.html</loc>
     
     <lastmod>2026-10-13</lastmod>
     
@@ -117,6 +126,41 @@
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>https://nyacchan.qzz.io/tags/Hexo/</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://nyacchan.qzz.io/tags/Fomalhaut/</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://nyacchan.qzz.io/tags/Cloudflare/</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://nyacchan.qzz.io/tags/%E9%83%A8%E7%BD%B2/</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://nyacchan.qzz.io/tags/AI/</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://nyacchan.qzz.io/tags/C%E8%AF%AD%E8%A8%80/</loc>
@@ -140,6 +184,13 @@
   </url>
   
 
+  
+  <url>
+    <loc>https://nyacchan.qzz.io/categories/%E6%8A%98%E8%85%BE%E8%AE%B0%E5%BD%95/</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://nyacchan.qzz.io/categories/%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/</loc>
