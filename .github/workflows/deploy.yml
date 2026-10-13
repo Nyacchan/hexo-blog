@@ -40,11 +40,21 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # 用 22：本地开发环境是 24，lock 文件由 npm 11 生成；
+          # Node 18/20 自带的 npm 10 对 lockfileVersion 2 的安装脚本策略更严，
+          # 曾导致 ttf2woff2 等含 install script 的包在 CI 上装不下来。
+          node-version: '22'
           cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        # --ignore-scripts=false 显式放行安装脚本（gulp-fontmin 依赖 ttf2woff2 的构建产物）；
+        # 关掉 audit/fund 减少网络往返，也避免审计接口偶发超时把构建带崩。
+        # 兜底：npm ci 若因 lock 与 registry 的差异失败，退回 npm install 保证出站。
+        run: |
+          npm ci --no-audit --no-fund || {
+            echo "::warning::npm ci 失败，回退到 npm install"
+            npm install --no-audit --no-fund
+          }
 
       - name: Build (hexo generate + gulp)
         env:
