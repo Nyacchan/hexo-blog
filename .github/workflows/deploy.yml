@@ -1,0 +1,68 @@
+# 构建 Hexo 站点并发布到 GitHub Pages（gh-pages 分支）
+# ---------------------------------------------------------------------------
+# 触发：推送到 main（源码分支）时自动构建并发布。
+# 产物：public/ 推到 gh-pages 分支，由 GitHub Pages 提供服务。
+#
+# 为什么用 Actions 而不是 `hexo deploy`：
+#   本地 deploy 依赖机器上的 node_modules 与 .ai-chat-key，
+#   Actions 里能统一用仓库的 package-lock.json 装依赖，构建结果可复现；
+#   AI 代理所需的 DEEPSEEK_API_KEY 放仓库 Secrets，不落盘。
+#
+# 需要的仓库配置（Settings）：
+#   Secrets and variables → Actions → New repository secret
+#       DEEPSEEK_API_KEY   可选。填了才会把页面配置切成走 /api 同源代理；
+#                          不填则前端不启用 AI 对话，构建照常成功。
+#   Settings → Pages → Source 选「Deploy from a branch」→ gh-pages / (root)
+# ---------------------------------------------------------------------------
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main]
+  # 允许在 Actions 页面手动触发一次
+  workflow_dispatch:
+
+# 只保留最新一次部署，避免排队积压
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (hexo generate + gulp)
+        env:
+          # 没配这个 Secret 时为空字符串，构建脚本会跳过代理注入，不影响出站
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          npx hexo clean
+          npx hexo generate
+          npx gulp
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          publish_branch: gh-pages
+          # 保留 gh-pages 历史，便于回滚（false = 每次全量覆盖）
+          force_orphan: false
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'deploy: ${{ github.event.head_commit.message }}'

@@ -1,0 +1,16 @@
+# Cloudflare Pages 构建配置
+# ---------------------------------------------------------------------------
+# 这是给 Cloudflare Pages 读的（wrangler.toml 也支持 pages_build_output_dir）。
+# 在 CF 后台连接本仓库时，构建命令与输出目录会自动读这里；
+# 若后台要手填，照下面填：
+#     构建命令：npx hexo clean && npx hexo generate && npx gulp
+#     输出目录：public
+#
+# 与 GitHub Pages 的分工：
+#     GitHub Pages  →  nyacchan.github.io   （备份线路，产物在 gh-pages 分支）
+#     Cloudflare Pages → nyacchan.qzz.io    （主线路，CF 自己构建）
+# 两边都从 main 分支的同一份源码构建，内容一致。
+# ---------------------------------------------------------------------------
+name = "hexo-blog"
+compatibility_date = "2026-10-14"
+pages_build_output_dir = "public"
