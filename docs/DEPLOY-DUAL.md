@@ -83,6 +83,21 @@ Actions 列表里还有一个 GitHub 内置的 `pages build and deployment` 任�
 > 而它本身又**不支持写构建命令**，加上只会让问题更难排查。
 > 构建命令一律在仪表盘填。
 > （历史备份见仓库外的 `_bak-deploy-notes/wrangler.toml.bak`。）
+>
+> **3. lock 文件必须用 npm 10 生成，否则 `npm ci` 会失败。**
+> 症状：
+> ```
+> npm error `npm ci` can only install packages when your package.json and
+>   package-lock.json or npm-shrinkwrap.json are in sync.
+> npm error Missing: chokidar@3.6.0 from lock file
+> ```
+> 根因：本机若用 npm 11 生成 lock，子依赖树会与 CI 的 npm 10 不一致
+> （`hexo-fs`/`nunjucks` 要求 `chokidar@^3`，npm 11 的扁平化结果 npm 10 不认）。
+> 修复：
+> ```bash
+> npx --yes npm@10 install --package-lock-only
+> ```
+> 该命令只补齐 lock 里缺的子依赖条目，不改动已装版本（实测纯新增、零删除、零版本漂移）。
 
 ### 1. 创建项目（Pages，不是 Workers）
 1. 打开 <https://dash.cloudflare.com/> → **Workers & Pages** → **Create**
