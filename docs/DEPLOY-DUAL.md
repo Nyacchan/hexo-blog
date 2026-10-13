@@ -13,7 +13,50 @@
 
 ---
 
-## 一、Cloudflare Pages（主线路）
+## 当前进度（2026-10-14）
+
+| 步骤 | 状态 |
+|---|---|
+| 源码仓库 `Nyacchan/hexo-blog` | ✅ 已建并推送 |
+| GitHub Actions 工作流 | ✅ 已跑通（run #2 success） |
+| `gh-pages` 分支 | ✅ 已生成 |
+| GitHub Pages 开关 | ⬜ **待开启**（Settings → Pages） |
+| Cloudflare Pages 项目 | ⬜ **待创建** |
+| `nyacchan.qzz.io` DNS | ⬜ **待绑定自定义域** |
+
+**剩下三步都需要在网页上操作**，见下面两节。
+
+---
+
+## 一、GitHub Pages（备份线路）
+
+### 开启 Pages
+1. 打开 <https://github.com/Nyacchan/hexo-blog/settings/pages>
+2. **Source** 选 **Deploy from a branch**
+3. **Branch** 选 **`gh-pages`**，目录选 **`/ (root)`** → **Save**
+4. 等 1–2 分钟，访问 <https://nyacchan.github.io>
+
+> `gh-pages` 分支已由 Actions 生成，现在可以在下拉框里选到。
+
+### （可选）AI 对话代理
+`/api/chat/completions.js` 需要 `DEEPSEEK_API_KEY` 才能工作。
+仓库 → **Settings → Secrets and variables → Actions → New repository secret**，
+名称 `DEEPSEEK_API_KEY`，值填你的 key。
+
+不填也能正常构建，只是前端不启用 AI 对话。
+
+> ⚠️ GitHub Pages 是纯静态托管，**不会执行** `/api` 下的 Serverless 函数。
+> 所以 gh.io 这条线路上的 AI 对话无法工作（会走 Cloudflare / Vercel 的代理）。
+> 其余功能（文章、搜索、画廊等）全部正常。
+
+### 关于 `pages build and deployment` 报错
+Actions 列表里还有一个 GitHub 内置的 `pages build and deployment` 任务，它失败是正常的：
+那是 GitHub 在开启 Pages **之前**尝试用 Jekyll 构建仓库根目录导致的。
+按上面第 3 步把 Source 指定成 `gh-pages` 分支后，它会被替换成正确的部署任务。
+
+---
+
+## 二、Cloudflare Pages（主线路）
 
 ### 1. 创建项目
 1. 打开 <https://dash.cloudflare.com/> → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
@@ -25,9 +68,9 @@
    | Framework preset | `None` |
    | Build command | `npx hexo clean && npx hexo generate && npx gulp` |
    | Build output directory | `public` |
-   | Environment variable | `NODE_VERSION` = `20` |
+   | Environment variable | `NODE_VERSION` = `22` |
 
-4. 点 **Save and Deploy**，等第一次构建完成（约 2–4 分钟）。
+4. 点 **Save and Deploy**，等第一次构建完成（约 3–5 分钟）。
    完成后会得到一个 `*.pages.dev` 的临时域名，先确认能打开。
 
 ### 2. 绑定自定义域
@@ -40,6 +83,7 @@
 ### 3.（可选）把 www 也指过来
 重复第 2 步，再绑一个 `www.nyacchan.qzz.io`，或加一条重定向规则
 （Rules → Redirect Rules）把 `www` 301 到裸域。
+
 
 ---
 
