@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://nyacchan.qzz.io/site/census/index.html</loc>
+    <loc>https://nyacchan.qzz.io/social/fcircle/index.html</loc>
     
     <lastmod>2026-10-13</lastmod>
     
@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://nyacchan.qzz.io/social/fcircle/index.html</loc>
+    <loc>https://nyacchan.qzz.io/site/census/index.html</loc>
     
     <lastmod>2026-10-13</lastmod>
     
@@ -83,6 +83,15 @@
   </url>
   
   <url>
+    <loc>https://nyacchan.qzz.io/box/gallery/index.html</loc>
+    
+    <lastmod>2026-10-13</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://nyacchan.qzz.io/box/gallery/wallpaper/index.html</loc>
     
     <lastmod>2026-10-13</lastmod>
@@ -93,15 +102,6 @@
   
   <url>
     <loc>https://nyacchan.qzz.io/box/astronomy/index.html</loc>
-    
-    <lastmod>2026-10-13</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://nyacchan.qzz.io/box/gallery/index.html</loc>
     
     <lastmod>2026-10-13</lastmod>
     
