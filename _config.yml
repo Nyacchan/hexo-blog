@@ -134,8 +134,10 @@ theme: fomalhaut
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   - type: git
-    repository: https://github.com/nyacchan/nyacchan.github.io.git # 这个Github仓库用自动部署即可
-    branch: main
+    # 源码在 main 分支，构建产物推 gh-pages 分支 —— 两者分开，hexo deploy 不会覆盖源码。
+    # 注意：仓库实际大小写是 Nyacchan（GitHub 会重定向，但写对更稳妥）。
+    repository: https://github.com/Nyacchan/hexo-blog.git
+    branch: gh-pages
   # - type: git
   #   #repo改为repo: git@域名:/var/repo/hexo.git
   #   repo: git@127.0.0.1:/var/repo/hexo.git
@@ -221,7 +223,10 @@ nofollow:
 # hexo-filter-gitcalendar
 # see https://akilar.top/posts/1f9c68c9/
 gitcalendar:
-  enable: true # 开关
+  # 2026-10-14 关闭：两种数据方案都还没就绪 —— 方案A 要自建 gitcalendar 服务，
+  # 方案B 要一个由 GitHub Action 定时产出的数据仓库（gitcalendar-data，尚未创建）。
+  # 开着的话 /site/census/ 会渲染一块永远空白的日历。想启用时补齐下面两项再把 enable 改回 true。
+  enable: false # 开关
   priority: 5 #过滤器优先权
   enable_page: /site/census/ # 应用页面
   # butterfly挂载容器
@@ -245,9 +250,12 @@ gitcalendar:
   #   name: content
   #   index: 0
   # simplemode: true
-  user: nyacchan # git用户名
-  apiurl: "https://gitcalendar.example.com" # 你的 gitcalendar 服务地址（自建好之后改这里）
-  jsonurl: "https://cdn.jsdelivr.net/gh/nyacchan/gitcalendar-data@main/data.json" # 方案B：GitHub Action 定时更新的数据
+  user: Nyacchan # git用户名
+  # 两种数据方案二选一（当前都未就绪，见上方 enable 处的说明）：
+  #   方案A 自建 gitcalendar 服务，把服务地址填到 apiurl
+  #   方案B 用 GitHub Action 定时把贡献数据推到 gitcalendar-data 仓库，读 jsonurl
+  apiurl: # 你的 gitcalendar 服务地址（自建好之后填这里）
+  jsonurl: "https://cdn.jsdelivr.net/gh/Nyacchan/gitcalendar-data@main/data.json" # 方案B：GitHub Action 定时更新的数据
   minheight:
     pc: 320px #桌面端最小高度
     mibile: 0px #移动端最小高度
