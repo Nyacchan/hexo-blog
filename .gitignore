@@ -29,3 +29,5 @@ images/
 cdn-check/
 # 图片处理临时目录（_process-images.ps1 的中间产物与原图）
 _imgtmp/
+# 部署配置的本地备份
+_bak-deploy-notes/

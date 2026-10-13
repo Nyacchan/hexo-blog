@@ -20,8 +20,9 @@
 | 源码仓库 `Nyacchan/hexo-blog` | ✅ 已建并推送 |
 | GitHub Actions 工作流 | ✅ 已跑通（run #2 success） |
 | `gh-pages` 分支 | ✅ 已生成 |
+| `package.json` 的 `build` 脚本 | ✅ 已含 gulp 压缩 |
 | GitHub Pages 开关 | ⬜ **待开启**（Settings → Pages） |
-| Cloudflare Pages 项目 | ⬜ **待创建** |
+| Cloudflare Pages 项目 | ⬜ **待创建**（注意框架预设选 Hexo） |
 | `nyacchan.qzz.io` DNS | ⬜ **待绑定自定义域** |
 
 **剩下三步都需要在网页上操作**，见下面两节。
@@ -58,19 +59,39 @@ Actions 列表里还有一个 GitHub 内置的 `pages build and deployment` 任�
 
 ## 二、Cloudflare Pages（主线路）
 
+> ⚠️ **踩坑记录**：仓库里**不要**放 `wrangler.toml`。
+> 原因：CF 的 autoconfig 会去探测项目框架，而本项目 `package.json` 里同时有
+> `hexo` 与 `gulp` 两个依赖，它会报
+> `unable to automatically configure your project, since multiple frameworks were found: Hexo, gulp.js`。
+> 而 `wrangler.toml` 本身**不支持写构建命令**，加上它反而会让 CF 进入「配置文件即配置源」
+> 模式（仪表盘对应字段被锁），问题更难排查。
+> 所以构建命令一律在仪表盘里填，框架预设明确选 **Hexo**。
+> （历史备份见仓库外的 `_bak-deploy-notes/wrangler.toml.bak`。）
+
 ### 1. 创建项目
 1. 打开 <https://dash.cloudflare.com/> → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
 2. 授权 GitHub，选择仓库 **`Nyacchan/hexo-blog`**，分支选 **`main`**
-3. 构建配置（仓库根已有 `wrangler.toml`，通常会自动读取；若要求手填则照下填）：
+3. 在 **Set up builds and deployments** 里填：
 
-   | 项 | 值 |
+   | 配置项 | 值 |
    |---|---|
-   | Framework preset | `None` |
-   | Build command | `npx hexo clean && npx hexo generate && npx gulp` |
+   | Framework preset | **Hexo** ← 必须显式选，别留 None/Auto |
+   | Build command | `npm run build` |
    | Build output directory | `public` |
-   | Environment variable | `NODE_VERSION` = `22` |
+   | Root directory | （留空） |
 
-4. 点 **Save and Deploy**，等第一次构建完成（约 3–5 分钟）。
+   > `npm run build` 已在 `package.json` 里定义为 `hexo generate && gulp`，
+   > 即「生成 + 压缩」，与本地构建完全一致。
+
+4. （推荐）展开 **Environment variables**，加一项：
+
+   | 变量名 | 值 |
+   |---|---|
+   | `NODE_VERSION` | `22` |
+
+   不设也能构建，但设了能避免 Node 版本漂移带来的玄学问题。
+
+5. 点 **Save and Deploy**，等第一次构建完成（约 3–5 分钟）。
    完成后会得到一个 `*.pages.dev` 的临时域名，先确认能打开。
 
 ### 2. 绑定自定义域
@@ -83,6 +104,20 @@ Actions 列表里还有一个 GitHub 内置的 `pages build and deployment` 任�
 ### 3.（可选）把 www 也指过来
 重复第 2 步，再绑一个 `www.nyacchan.qzz.io`，或加一条重定向规则
 （Rules → Redirect Rules）把 `www` 301 到裸域。
+
+### 4.（可选）AI 对话代理
+CF Pages 会执行仓库里 `functions/api/chat/completions.js` 这个 Pages Function，
+它就是 AI 对话的同源代理。需要给它配 API Key：
+
+项目 → **Settings → Environment variables** → 添加：
+
+| 变量名 | 值 | 环境 |
+|---|---|---|
+| `DEEPSEEK_API_KEY` | 你的 key | Production 与 Preview 都勾上 |
+
+配好后重新部署一次即可生效。这条路线上 AI 对话是**完整可用**的
+（GitHub Pages 那条线不行，见上文说明）。
+
 
 
 ---
