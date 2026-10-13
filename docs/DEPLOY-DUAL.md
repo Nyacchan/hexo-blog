@@ -59,19 +59,36 @@ Actions 列表里还有一个 GitHub 内置的 `pages build and deployment` 任�
 
 ## 二、Cloudflare Pages（主线路）
 
-> ⚠️ **踩坑记录**：仓库里**不要**放 `wrangler.toml`。
-> 原因：CF 的 autoconfig 会去探测项目框架，而本项目 `package.json` 里同时有
-> `hexo` 与 `gulp` 两个依赖，它会报
-> `unable to automatically configure your project, since multiple frameworks were found: Hexo, gulp.js`。
-> 而 `wrangler.toml` 本身**不支持写构建命令**，加上它反而会让 CF 进入「配置文件即配置源」
-> 模式（仪表盘对应字段被锁），问题更难排查。
-> 所以构建命令一律在仪表盘里填，框架预设明确选 **Hexo**。
+> ⚠️ **踩坑记录（务必先读，能省半小时）**
+>
+> **1. 必须建 Pages 项目，不要建 Workers 项目。**
+> CF 新版控制台把入口合并成了 **Workers & Pages**，默认容易点进 **Workers**。
+> Workers 项目的部署命令是 `npx wrangler deploy`，它会对项目做 autoconfig 框架探测，
+> 而本项目 `package.json` 里同时有 `hexo` 与 `gulp` 两个依赖，于是必然报：
+>
+> ```
+> ✘ [ERROR] Cloudflare's tooling was unable to automatically configure your project,
+>   since multiple frameworks were found: Hexo, gulp.js.
+> ```
+>
+> 症状是**构建成功但部署失败**（日志里能看到 `Success: Build command completed`，
+> 紧接着 `Failed: error occurred while running deploy command`）。
+>
+> 正确入口：**Workers & Pages → Create → 切到 `Pages` 标签 → Connect to Git**。
+> 注意 Create 页面顶部有 `Workers` / `Pages` 两个 tab，要选 **Pages**。
+>
+> **2. 仓库里不要放 `wrangler.toml`。**
+> 按官方说明，一旦使用 wrangler 配置文件，它就成为「配置源」，
+> 仪表盘里对应字段会被锁（[文档](https://developers.cloudflare.com/pages/functions/wrangler-configuration/)），
+> 而它本身又**不支持写构建命令**，加上只会让问题更难排查。
+> 构建命令一律在仪表盘填。
 > （历史备份见仓库外的 `_bak-deploy-notes/wrangler.toml.bak`。）
 
-### 1. 创建项目
-1. 打开 <https://dash.cloudflare.com/> → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
-2. 授权 GitHub，选择仓库 **`Nyacchan/hexo-blog`**，分支选 **`main`**
-3. 在 **Set up builds and deployments** 里填：
+### 1. 创建项目（Pages，不是 Workers）
+1. 打开 <https://dash.cloudflare.com/> → **Workers & Pages** → **Create**
+2. **切到顶部的 `Pages` 标签**（默认可能是 Workers）→ **Connect to Git**
+3. 授权 GitHub，选择仓库 **`Nyacchan/hexo-blog`**，分支选 **`main`**
+4. 在 **Set up builds and deployments** 里填：
 
    | 配置项 | 值 |
    |---|---|
@@ -83,7 +100,7 @@ Actions 列表里还有一个 GitHub 内置的 `pages build and deployment` 任�
    > `npm run build` 已在 `package.json` 里定义为 `hexo generate && gulp`，
    > 即「生成 + 压缩」，与本地构建完全一致。
 
-4. （推荐）展开 **Environment variables**，加一项：
+5. （推荐）展开 **Environment variables**，加一项：
 
    | 变量名 | 值 |
    |---|---|
@@ -91,7 +108,7 @@ Actions 列表里还有一个 GitHub 内置的 `pages build and deployment` 任�
 
    不设也能构建，但设了能避免 Node 版本漂移带来的玄学问题。
 
-5. 点 **Save and Deploy**，等第一次构建完成（约 3–5 分钟）。
+6. 点 **Save and Deploy**，等第一次构建完成（约 3–5 分钟）。
    完成后会得到一个 `*.pages.dev` 的临时域名，先确认能打开。
 
 ### 2. 绑定自定义域

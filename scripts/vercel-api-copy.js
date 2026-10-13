@@ -13,6 +13,14 @@
  *   functions/api/chat/completions.js  →  Cloudflare Pages Function，同名路由（Pages 里函数优先于静态文件）
  *
  * 真 key 不在这两个文件里：函数运行时从 Vercel 环境变量 DEEPSEEK_API_KEY 读。
+ *
+ * ---------------------------------------------------------------------------
+ * 2026-10-14 追加：CF Pages 的 Git 集成构建下**跳过拷贝**。
+ * 因为 CF Pages 会直接读仓库根目录的 functions/ 作为 Functions，
+ * 再往 public/ 拷一份只会让那份源码被当静态文件对外暴露（不含密钥，但不必要），
+ * 而且路由上两份并存容易混淆。
+ * 判断依据是 CF Pages 注入的 CF_PAGES 环境变量（CI 构建时值为 '1'）。
+ * 想强制拷贝：设 SKIP_VERCEL_API_COPY=0。
  */
 'use strict';
 
@@ -25,7 +33,19 @@ const PAIRS = [
   ['functions/api/chat/completions.js', 'functions/api/chat/completions.js']
 ];
 
+/** CF Pages 构建时跳过：它自己会读根目录的 functions/。 */
+function isCloudflarePagesBuild() {
+  if (String(process.env.SKIP_VERCEL_API_COPY || '') === '0') return false;   // 显式要求照拷
+  return String(process.env.CF_PAGES || '') === '1';
+}
+
 hexo.extend.filter.register('after_generate', function () {
+  if (isCloudflarePagesBuild()) {
+    hexo.log.info('vercel-api-copy：检测到 Cloudflare Pages 构建（CF_PAGES=1），跳过拷贝' +
+      '（Pages 直接读根目录 functions/）');
+    return;
+  }
+
   const base = hexo.base_dir || process.cwd();
   const pub = path.join(base, 'public');
   PAIRS.forEach(function (pair) {
