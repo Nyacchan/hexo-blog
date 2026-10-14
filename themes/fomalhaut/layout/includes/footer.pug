@@ -59,8 +59,13 @@
     a.github-badge(target='_blank' href="https://github.com/fomalhaut1998/hexo-theme-fomalhaut" style='margin-inline:5px' title="主题Fomalhaut v1.0.4(基于Butterfly v4.3.1)")
       img(src="/assets/badge/Theme-Fomalhaut-6513df.svg" alt='')
 
-    a.github-badge(target='_blank' href="https://vercel.com/" style='margin-inline:5px' title="本站采用多线部署，主线路托管于Vercel")
-      img(src="https://img.shields.io/badge/Hosted-Vercel-brightgreen.svg" alt='')
+    //- 托管线路（2026-10-14 更新）：主线路 Cloudflare Pages，备份线路 GitHub Pages。
+    //- 原来挂的是 Hosted-Vercel，早已不实，换成两枚自托管 SVG（配色见 source/assets/badge/）。
+    a.github-badge(target='_blank' href="https://nyacchan.qzz.io/" style='margin-inline:5px' title="主线路：nyacchan.qzz.io，由 Cloudflare Pages 托管")
+      img(src="/assets/badge/Hosted-Cloudflare.svg" alt='')
+
+    a.github-badge(target='_blank' href="https://nyacchan.github.io/nyacchan-hexo-blog/" style='margin-inline:5px' title="备份线路：GitHub Pages，同一份源码自动构建")
+      img(src="/assets/badge/Hosted-GitHubPages.svg" alt='')
 
     //- 51la 统计已关（2026-10-14），徽章一并撤下，免得挂着没在用的统计。
     //- 想恢复：重新启用 source/js/51la.js 与 inject.bottom 的三行脚本后，把下面两行放开。
