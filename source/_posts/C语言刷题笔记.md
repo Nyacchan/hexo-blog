@@ -12,8 +12,8 @@ description: 从 P1001 A+B 到【入门1】【入门2】两个单元全部 AK，
 cover: 'https://picsum.photos/id/1044/1200/675'
 comments: true
 abbrlink: 438dd0b4
-date: 2026-10-20 10:00:00
-updated: 2026-10-14 12:00:00
+date: 2026-10-15 10:53:00
+updated: 2026-10-15 10:53:00
 ---
 
 > 从 `P1001 A+B` 一路刷到 `P1055 ISBN 号码`，【入门1】顺序结构、【入门2】分支结构两个单元**全部 AK**（33 题）。
